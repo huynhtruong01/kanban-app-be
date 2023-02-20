@@ -1,7 +1,7 @@
 {
     "name": "kanban-app-be",
     "version": "1.0.0",
-    "main": "app.ts",
+    "main": "app.js",
     "author": "Athetics Huynh",
     "license": "MIT",
     "scripts": {
