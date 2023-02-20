@@ -27,7 +27,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const { username, password } = req.body
 
     try {
-        const user: IUser | null = await User.findOne({ username })
+        const user = await User.findOne({ username })
         if (!user) {
             return res.status(404).json({
                 status: 'error',

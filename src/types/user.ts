@@ -4,8 +4,8 @@ import { Document } from 'mongoose'
 export interface IUserModel extends Document {
     username: string
     fullname: string
-    password: string
-    confirmPassword: string
+    password: string | undefined
+    confirmPassword: string | undefined
 }
 
 export interface IUser {
