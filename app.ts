@@ -1,9 +1,10 @@
 import cors from 'cors'
 import dotenv from 'dotenv'
-import express from 'express'
+import express, { Response } from 'express'
 import morgan from 'morgan'
 import { connectDB } from './src/config'
 import { routes } from './src/routes'
+import { IRequestUser } from './src/types'
 const app = express()
 
 dotenv.config({
@@ -15,7 +16,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use(cors())
 
-app.use('/api/v1', routes)
+app.use(
+    '/api/v1',
+    (req: IRequestUser, res: Response) => {
+        res.json({
+            title: 'Welcome to Kanban App.',
+        })
+    },
+    routes
+)
 
 connectDB()
 
