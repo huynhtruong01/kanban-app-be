@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { User } from '../models'
-import { IUser } from '../types'
 import { checkPassword, signToken } from '../utils'
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
