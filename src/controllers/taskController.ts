@@ -66,7 +66,6 @@ export const update = async (req: IRequestUser, res: Response, next: NextFunctio
 
 export const remove = async (req: IRequestUser, res: Response, next: NextFunction) => {
     const { taskId } = req.params
-    const { sectionId } = req.body
 
     try {
         const task = await Task.findById(taskId)
@@ -77,7 +76,7 @@ export const remove = async (req: IRequestUser, res: Response, next: NextFunctio
             })
 
         await Task.deleteOne({ _id: taskId })
-        const tasks = await Task.find({ section: sectionId })
+        const tasks = await Task.find({ section: task.section })
 
         const taskUpdateKeyAsync: any[] = []
         for (const key in tasks) {
