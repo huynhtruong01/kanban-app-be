@@ -195,6 +195,7 @@ const updateFavoritePosition = (req, res, next) => __awaiter(void 0, void 0, voi
         }
         res.status(200).json({
             status: 'success',
+            data: null,
         });
     }
     catch (error) {
@@ -205,5 +206,50 @@ const updateFavoritePosition = (req, res, next) => __awaiter(void 0, void 0, voi
     }
 });
 exports.updateFavoritePosition = updateFavoritePosition;
-const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { });
+const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { boardId } = req.params;
+    try {
+        // TODO: delete all section have boardId
+        const sections = yield models_1.Section.find({ boardId });
+        const deleteManySections = sections.forEach((section) => {
+            models_1.Task.deleteMany({ sectionId: section._id });
+        });
+        yield Promise.all([deleteManySections]);
+        // TODO: update all favorites position
+        const board = yield models_1.Board.findById(boardId);
+        if (board === null || board === void 0 ? void 0 : board.favorite) {
+            const favorites = yield models_1.Board.find({
+                user: board.user,
+                favorite: true,
+                _id: {
+                    $ne: boardId,
+                },
+            }).sort('favoritePosition');
+            for (const key in favorites) {
+                const element = favorites[key];
+                yield models_1.Board.findByIdAndUpdate(element.id, {
+                    $set: { favoritePosition: key },
+                });
+            }
+        }
+        // TODO: delete board
+        yield models_1.Board.deleteOne({ _id: boardId });
+        // TODO: update all position of board
+        const boards = yield models_1.Board.find().sort('position');
+        for (const key in boards) {
+            const board = boards[key];
+            yield models_1.Board.findByIdAndUpdate(board.id, { $set: { position: key } });
+        }
+        res.status(204).json({
+            status: 'success',
+            data: null,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            message: error.message,
+        });
+    }
+});
 exports.remove = remove;

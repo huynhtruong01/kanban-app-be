@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express'
 import { Board, Section, Task } from '../models'
 import { resCheckAuth } from '../utils'
-import { IBoard, IRequestUser } from './../types'
+import { IBoard, IBoardModel, IRequestUser, ISection, ISectionModel } from './../types'
 
 export const create = async (req: IRequestUser, res: Response, next: NextFunction) => {
     try {
@@ -203,6 +203,7 @@ export const updateFavoritePosition = async (
 
         res.status(200).json({
             status: 'success',
+            data: null,
         })
     } catch (error: any) {
         res.status(500).json({
@@ -212,4 +213,55 @@ export const updateFavoritePosition = async (
     }
 }
 
-export const remove = async (req: IRequestUser, res: Response, next: NextFunction) => {}
+export const remove = async (req: IRequestUser, res: Response, next: NextFunction) => {
+    const { boardId } = req.params
+
+    try {
+        // TODO: delete all section have boardId
+        const sections = await Section.find({ boardId })
+        const deleteManySections = sections.forEach((section: ISectionModel) => {
+            Task.deleteMany({ sectionId: section._id })
+        })
+
+        await Promise.all([deleteManySections])
+
+        // TODO: update all favorites position
+        const board = await Board.findById(boardId)
+        if (board?.favorite) {
+            const favorites = await Board.find({
+                user: board.user,
+                favorite: true,
+                _id: {
+                    $ne: boardId,
+                },
+            }).sort('favoritePosition')
+
+            for (const key in favorites) {
+                const element = favorites[key]
+                await Board.findByIdAndUpdate(element.id, {
+                    $set: { favoritePosition: key },
+                })
+            }
+        }
+
+        // TODO: delete board
+        await Board.deleteOne({ _id: boardId })
+
+        // TODO: update all position of board
+        const boards = await Board.find().sort('position')
+        for (const key in boards) {
+            const board = boards[key]
+            await Board.findByIdAndUpdate(board.id, { $set: { position: key } })
+        }
+
+        res.status(204).json({
+            status: 'success',
+            data: null,
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            status: 'failed',
+            message: error.message,
+        })
+    }
+}

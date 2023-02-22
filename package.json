@@ -5,7 +5,8 @@
     "author": "Athetics Huynh",
     "license": "MIT",
     "scripts": {
-        "start": "nodemon dict/app.js"
+        "start": "nodemon dict/app.js",
+        "build": "tsc"
     },
     "devDependencies": {
         "@types/cors": "^2.8.13",

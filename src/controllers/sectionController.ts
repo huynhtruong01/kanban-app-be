@@ -68,6 +68,7 @@ export const remove = async (req: IRequestUser, res: Response, next: NextFunctio
 
         res.status(204).json({
             status: 'success',
+            data: null,
         })
     } catch (error: any) {
         res.status(500).json({

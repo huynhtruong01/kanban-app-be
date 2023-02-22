@@ -17,11 +17,12 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, morgan_1.default)('dev'));
 app.use((0, cors_1.default)());
+app.use('/api/v1', routes_1.routes);
 app.use('/api/v1', (req, res) => {
     res.json({
-        title: 'Welcome to Kanban App.',
+        title: 'Welcome to Kanban API.',
     });
-}, routes_1.routes);
+});
 (0, config_1.connectDB)();
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server is running, port: ${port}`));

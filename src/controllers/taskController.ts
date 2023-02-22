@@ -76,7 +76,7 @@ export const remove = async (req: IRequestUser, res: Response, next: NextFunctio
             })
 
         await Task.deleteOne({ _id: taskId })
-        const tasks = await Task.find({ section: task.section })
+        const tasks = await Task.find({ section: task.section }).sort('position')
 
         const taskUpdateKeyAsync: any[] = []
         for (const key in tasks) {
@@ -93,6 +93,40 @@ export const remove = async (req: IRequestUser, res: Response, next: NextFunctio
         await Promise.all([taskUpdateKeyAsync])
 
         res.status(204).json({
+            status: 'success',
+            data: null,
+        })
+    } catch (error: any) {
+        res.status(500).json({
+            status: 'failed',
+            message: error.message,
+        })
+    }
+}
+
+export const updatePosition = async (
+    req: IRequestUser,
+    res: Response,
+    next: NextFunction
+) => {
+    const { tasks } = req.body
+
+    try {
+        const updatePositionTasks = []
+        for (const key in tasks) {
+            const task = tasks[key]
+            updatePositionTasks.push(
+                Task.findByIdAndUpdate(task._id, {
+                    $set: {
+                        position: key,
+                    },
+                })
+            )
+        }
+
+        await Promise.all([updatePositionTasks])
+
+        res.status(200).json({
             status: 'success',
             data: null,
         })

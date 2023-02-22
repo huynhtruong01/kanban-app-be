@@ -10,5 +10,5 @@ export interface ISection {
 export interface ISectionModel extends Document {
     user: string
     title: string
-    _doc?: any
+    _doc: any
 }

@@ -18,13 +18,15 @@ app.use(cors())
 
 app.use(
     '/api/v1',
-    (req: IRequestUser, res: Response) => {
-        res.json({
-            title: 'Welcome to Kanban App.',
-        })
-    },
+
     routes
 )
+
+app.use('/api/v1', (req: IRequestUser, res: Response) => {
+    res.json({
+        title: 'Welcome to Kanban API.',
+    })
+})
 
 connectDB()
 

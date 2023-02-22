@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remove = exports.update = exports.create = void 0;
+exports.updatePosition = exports.remove = exports.update = exports.create = void 0;
 const models_1 = require("../models");
 const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { sectionId } = req.body;
@@ -75,7 +75,7 @@ const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
                 message: 'Not found this task.',
             });
         yield models_1.Task.deleteOne({ _id: taskId });
-        const tasks = yield models_1.Task.find({ section: task.section });
+        const tasks = yield models_1.Task.find({ section: task.section }).sort('position');
         const taskUpdateKeyAsync = [];
         for (const key in tasks) {
             const ele = tasks[key];
@@ -99,3 +99,29 @@ const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.remove = remove;
+const updatePosition = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tasks } = req.body;
+    try {
+        const updatePositionTasks = [];
+        for (const key in tasks) {
+            const task = tasks[key];
+            updatePositionTasks.push(models_1.Task.findByIdAndUpdate(task._id, {
+                $set: {
+                    position: key,
+                },
+            }));
+        }
+        yield Promise.all([updatePositionTasks]);
+        res.status(200).json({
+            status: 'success',
+            data: null,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'failed',
+            message: error.message,
+        });
+    }
+});
+exports.updatePosition = updatePosition;

@@ -68,6 +68,7 @@ const remove = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         yield models_1.Section.findByIdAndDelete(sectionId);
         res.status(204).json({
             status: 'success',
+            data: null,
         });
     }
     catch (error) {
