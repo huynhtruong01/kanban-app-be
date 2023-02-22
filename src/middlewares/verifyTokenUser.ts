@@ -9,6 +9,7 @@ export interface IJwtPayload {
 
 export const decodeToken = (req: IRequestUser) => {
     const bearerHeader = req.headers['authorization']
+    console.log(bearerHeader)
 
     if (bearerHeader) {
         const token: string = bearerHeader.split(' ')[1]
@@ -26,6 +27,7 @@ export const verifyTokenUser = async (
 ) => {
     try {
         const decodedToken: IJwtPayload | undefined = decodeToken(req)
+        console.log(decodedToken)
 
         if (!decodedToken)
             return res.status(401).json({

@@ -1,11 +1,11 @@
 {
     "name": "kanban-app-be",
     "version": "1.0.0",
-    "main": "dict/app.js",
+    "main": "app.ts",
     "author": "Athetics Huynh",
     "license": "MIT",
     "scripts": {
-        "start": "nodemon dict/app.js",
+        "start": "nodemon app.ts",
         "build": "tsc"
     },
     "devDependencies": {

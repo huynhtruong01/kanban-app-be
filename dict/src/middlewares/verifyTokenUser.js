@@ -14,6 +14,7 @@ const models_1 = require("../models");
 const utils_1 = require("../utils");
 const decodeToken = (req) => {
     const bearerHeader = req.headers['authorization'];
+    console.log(bearerHeader);
     if (bearerHeader) {
         const token = bearerHeader.split(' ')[1];
         const user = (0, utils_1.verifyToken)(token);
@@ -26,6 +27,7 @@ exports.decodeToken = decodeToken;
 const verifyTokenUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decodedToken = (0, exports.decodeToken)(req);
+        console.log(decodedToken);
         if (!decodedToken)
             return res.status(401).json({
                 status: 'error',

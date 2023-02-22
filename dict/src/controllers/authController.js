@@ -42,26 +42,27 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
                 message: 'Invalid username or not found this user.',
             });
         }
-        let isCorrectPassword = false;
         if (user.password) {
-            isCorrectPassword = yield (0, utils_1.checkPassword)(password, user.password);
-        }
-        if (!isCorrectPassword) {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'Incorrect password.',
+            const isCorrectPassword = yield (0, utils_1.checkPassword)(password, user.password);
+            if (!isCorrectPassword) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'Incorrect password.',
+                });
+            }
+            user.password = undefined;
+            user.confirmPassword = undefined;
+            console.log(user);
+            const token = (0, utils_1.signToken)(user.id);
+            console.log(token);
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user,
+                    token,
+                },
             });
         }
-        user.password = undefined;
-        user.confirmPassword = undefined;
-        const token = (0, utils_1.signToken)(user.id);
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user,
-                token,
-            },
-        });
     }
     catch (error) {
         res.status(500).json({

@@ -34,30 +34,30 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             })
         }
 
-        let isCorrectPassword: boolean = false
         if (user.password) {
-            isCorrectPassword = await checkPassword(password, user.password)
-        }
+            const isCorrectPassword = await checkPassword(password, user.password)
+            if (!isCorrectPassword) {
+                return res.status(404).json({
+                    status: 'failed',
+                    message: 'Incorrect password.',
+                })
+            }
 
-        if (!isCorrectPassword) {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'Incorrect password.',
+            user.password = undefined
+            user.confirmPassword = undefined
+            console.log(user)
+
+            const token = signToken(user.id)
+            console.log(token)
+
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user,
+                    token,
+                },
             })
         }
-
-        user.password = undefined
-        user.confirmPassword = undefined
-
-        const token = signToken(user.id)
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user,
-                token,
-            },
-        })
     } catch (error: any) {
         res.status(500).json({
             status: 'failed',
