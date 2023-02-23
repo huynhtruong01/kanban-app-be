@@ -9,11 +9,11 @@ router.use(verifyTokenUser)
 router
     .route('/')
     .get(boardController.getAll)
-    .get(boardController.getFavorite)
     .post(boardController.create)
     .put(boardController.updatePosition)
-    .post(boardController.updateFavoritePosition)
+    
+router.route('/:boardId').get(boardController.getOne).put(boardController.update).delete(boardController.remove)
+router.route('/favorites').get(boardController.getFavorite).post(boardController.updateFavoritePosition)
 
-router.route('/:boardId').get(boardController.getOne).put(boardController.update)
 
 export default router
