@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express'
 import { Board, Section, Task } from '../models'
 import { resCheckAuth } from '../utils'
-import { IBoard, IBoardModel, IRequestUser, ISection, ISectionModel } from './../types'
+import { IBoard, IRequestUser, ISectionModel } from './../types'
 
 export const create = async (req: IRequestUser, res: Response, next: NextFunction) => {
     try {

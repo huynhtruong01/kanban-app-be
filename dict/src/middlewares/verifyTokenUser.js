@@ -14,7 +14,6 @@ const models_1 = require("../models");
 const utils_1 = require("../utils");
 const decodeToken = (req) => {
     const bearerHeader = req.headers['authorization'];
-    console.log(bearerHeader);
     if (bearerHeader) {
         const token = bearerHeader.split(' ')[1];
         const user = (0, utils_1.verifyToken)(token);

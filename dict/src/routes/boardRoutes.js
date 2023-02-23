@@ -9,11 +9,17 @@ const middlewares_1 = require("../middlewares");
 const router = express_1.default.Router();
 router.use(middlewares_1.verifyTokenUser);
 router
+    .route('/favorites')
+    .get(controllers_1.boardController.getFavorite)
+    .post(controllers_1.boardController.updateFavoritePosition);
+router
     .route('/')
     .get(controllers_1.boardController.getAll)
-    .get(controllers_1.boardController.getFavorite)
     .post(controllers_1.boardController.create)
-    .put(controllers_1.boardController.updatePosition)
-    .post(controllers_1.boardController.updateFavoritePosition);
-router.route('/:boardId').get(controllers_1.boardController.getOne).put(controllers_1.boardController.update);
+    .put(controllers_1.boardController.updatePosition);
+router
+    .route('/:boardId')
+    .get(controllers_1.boardController.getOne)
+    .put(controllers_1.boardController.update)
+    .delete(controllers_1.boardController.remove);
 exports.default = router;

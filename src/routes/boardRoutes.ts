@@ -7,13 +7,20 @@ const router = express.Router()
 router.use(verifyTokenUser)
 
 router
+    .route('/favorites')
+    .get(boardController.getFavorite)
+    .post(boardController.updateFavoritePosition)
+
+router
     .route('/')
     .get(boardController.getAll)
     .post(boardController.create)
     .put(boardController.updatePosition)
-    
-router.route('/:boardId').get(boardController.getOne).put(boardController.update).delete(boardController.remove)
-router.route('/favorites').get(boardController.getFavorite).post(boardController.updateFavoritePosition)
 
+router
+    .route('/:boardId')
+    .get(boardController.getOne)
+    .put(boardController.update)
+    .delete(boardController.remove)
 
 export default router
