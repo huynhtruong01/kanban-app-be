@@ -83,7 +83,7 @@ const getOne = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     try {
         if (!req.user)
             return (0, utils_1.resCheckAuth)(res);
-        const board = yield models_1.Board.findOne({ user: req.user.id, id: boardId });
+        const board = yield models_1.Board.findOne({ user: req.user.id, _id: boardId });
         if (!board)
             return res.status(404).json({
                 status: 'failed',
@@ -114,14 +114,16 @@ const getOne = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 exports.getOne = getOne;
 const update = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { boardId } = req.params;
-    const { title, description, favorite } = req.body;
+    const { title, description, favorite, icon } = req.body;
     try {
         if (!req.user)
             return (0, utils_1.resCheckAuth)(res);
+        if (icon === '')
+            req.body.icon = '📜';
         if (title === '')
             req.body.title = 'Untitled';
         if (description === '')
-            req.body.description = 'Add description here';
+            req.body.description = 'Add description here...';
         const currentBoard = yield models_1.Board.findById(boardId);
         if (!currentBoard)
             return res.status(404).json({
@@ -137,13 +139,15 @@ const update = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
                 req.body.favoritePosition = favorites.length > 0 ? favorites.length : 0;
             }
             else {
+                const list = [];
                 for (const key in favorites) {
                     const ele = favorites[key];
-                    yield models_1.Board.findByIdAndUpdate(ele.id, {
+                    list.push(models_1.Board.findByIdAndUpdate(ele.id, {
                         $set: {
                             favoritePosition: key,
                         },
-                    });
+                    }));
+                    yield Promise.all([list]);
                 }
             }
         }

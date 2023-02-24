@@ -79,7 +79,7 @@ export const getOne = async (req: IRequestUser, res: Response, next: NextFunctio
 
     try {
         if (!req.user) return resCheckAuth(res)
-        const board = await Board.findOne({ user: req.user.id, id: boardId })
+        const board = await Board.findOne({ user: req.user.id, _id: boardId })
         if (!board)
             return res.status(404).json({
                 status: 'failed',
@@ -112,13 +112,15 @@ export const getOne = async (req: IRequestUser, res: Response, next: NextFunctio
 
 export const update = async (req: IRequestUser, res: Response, next: NextFunction) => {
     const { boardId } = req.params
-    const { title, description, favorite } = req.body
+    const { title, description, favorite, icon } = req.body
 
     try {
         if (!req.user) return resCheckAuth(res)
 
+        if (icon === '') req.body.icon = '📜'
         if (title === '') req.body.title = 'Untitled'
-        if (description === '') req.body.description = 'Add description here'
+        if (description === '') req.body.description = 'Add description here...'
+
         const currentBoard = await Board.findById(boardId)
         if (!currentBoard)
             return res.status(404).json({
@@ -135,13 +137,16 @@ export const update = async (req: IRequestUser, res: Response, next: NextFunctio
             if (favorite) {
                 req.body.favoritePosition = favorites.length > 0 ? favorites.length : 0
             } else {
+                const list: any[] = []
                 for (const key in favorites) {
                     const ele = favorites[key]
-                    await Board.findByIdAndUpdate(ele.id, {
+                    list.push(Board.findByIdAndUpdate(ele.id, {
                         $set: {
                             favoritePosition: key,
                         },
-                    })
+                    }))
+
+                    await Promise.all([list])
                 }
             }
         }

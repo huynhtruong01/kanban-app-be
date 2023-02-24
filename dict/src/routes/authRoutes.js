@@ -10,7 +10,6 @@ const router = express_1.default.Router();
 router.post('/login', controllers_1.authController.login);
 router.post('/signup', controllers_1.authController.signup);
 router.post('/verify-token', middlewares_1.verifyTokenUser, (req, res) => {
-    console.log(req);
     res.status(200).json({ status: 'success', data: { user: req.user } });
 });
 exports.default = router;

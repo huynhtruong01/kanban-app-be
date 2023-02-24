@@ -26,7 +26,6 @@ export const verifyTokenUser = async (
 ) => {
     try {
         const decodedToken: IJwtPayload | undefined = decodeToken(req)
-        console.log(decodedToken)
 
         if (!decodedToken)
             return res.status(401).json({

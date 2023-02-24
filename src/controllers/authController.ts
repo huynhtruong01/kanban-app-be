@@ -45,10 +45,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
             user.password = undefined
             user.confirmPassword = undefined
-            console.log(user)
 
             const token = signToken(user.id)
-            console.log(token)
 
             res.status(200).json({
                 status: 'success',

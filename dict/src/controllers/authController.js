@@ -52,9 +52,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             }
             user.password = undefined;
             user.confirmPassword = undefined;
-            console.log(user);
             const token = (0, utils_1.signToken)(user.id);
-            console.log(token);
             res.status(200).json({
                 status: 'success',
                 data: {

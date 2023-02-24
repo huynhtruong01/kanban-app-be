@@ -26,7 +26,6 @@ exports.decodeToken = decodeToken;
 const verifyTokenUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decodedToken = (0, exports.decodeToken)(req);
-        console.log(decodedToken);
         if (!decodedToken)
             return res.status(401).json({
                 status: 'error',
