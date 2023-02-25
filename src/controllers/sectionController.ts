@@ -3,9 +3,10 @@ import { Section, Task } from '../models'
 import { IRequestUser } from '../types'
 
 export const create = async (req: IRequestUser, res: Response, next: NextFunction) => {
-    const { boardId } = req.params
+    const { boardId } = req.body
 
     try {
+
         const newSection = await Section.create({ board: boardId })
         newSection._doc.tasks = []
 
