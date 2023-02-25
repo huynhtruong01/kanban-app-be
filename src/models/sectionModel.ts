@@ -11,7 +11,7 @@ const sectionModel = new mongoose.Schema(
         },
         title: {
             type: String,
-            default: '',
+            default: 'Untitled',
         },
     },
     schemaOptions

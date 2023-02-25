@@ -14,7 +14,7 @@ const sectionModel = new mongoose_1.default.Schema({
     },
     title: {
         type: String,
-        default: '',
+        default: 'Untitled',
     },
 }, config_1.schemaOptions);
 exports.Section = mongoose_1.default.model('Section', sectionModel);

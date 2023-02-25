@@ -11,7 +11,7 @@ const taskSchema = new mongoose.Schema(
         },
         title: {
             type: String,
-            default: '',
+            default: 'Untitled',
         },
         content: {
             type: String,
