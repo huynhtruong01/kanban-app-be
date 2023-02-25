@@ -23,7 +23,9 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             });
             res.status(201).json({
                 status: 'success',
-                task: newTask,
+                data: {
+                    task: newTask,
+                }
             });
         }
     }

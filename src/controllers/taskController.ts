@@ -17,7 +17,9 @@ export const create = async (req: IRequestUser, res: Response, next: NextFunctio
 
             res.status(201).json({
                 status: 'success',
-                task: newTask,
+                data: {
+                    task: newTask,
+                }
             })
         }
     } catch (error: any) {
