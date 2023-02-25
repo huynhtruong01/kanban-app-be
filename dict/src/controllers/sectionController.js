@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.remove = exports.update = exports.create = void 0;
 const models_1 = require("../models");
 const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { boardId } = req.params;
+    const { boardId } = req.body;
     try {
         const newSection = yield models_1.Section.create({ board: boardId });
         newSection._doc.tasks = [];
